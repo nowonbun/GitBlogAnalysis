@@ -9,7 +9,8 @@ class Analysis
     private $url;
     private $referrer;
     private $browser;
-    public function __construct($url, $referrer, $browser)
+    private $agent;
+    public function __construct($url, $referrer, $browser, $agent)
     {
         $this->url = $url;
         $this->referrer = $referrer;
@@ -20,9 +21,9 @@ class Analysis
         if(trim($this->url) != ""){
             $conn = new mysqli("localhost", "root", "", "");
             try {
-                $stmt = $conn->prepare("INSERT INTO analysis (url, referrer, browser, createddate) VALUES (?, ?, ?, now())");
+                $stmt = $conn->prepare("INSERT INTO analysis (url, referrer, browser, agent,createddate) VALUES (?, ?, ?, ?,now())");
                 try {
-                    $stmt->bind_param("sss", $this->url, $this->referrer, $this->browser);
+                    $stmt->bind_param("sss", $this->url, $this->referrer, $this->browser, $this->agent);
                     $stmt->execute();
                 } finally {
                     $stmt->close();
@@ -36,4 +37,4 @@ class Analysis
         }
     }
 }
-$node = new Analysis($_POST["url"], $_POST["referrer"], $_POST["browser"]);
+$node = new Analysis($_POST["url"], $_POST["referrer"], $_POST["browser"], $_POST["agent"]);
