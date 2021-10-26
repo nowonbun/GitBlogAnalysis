@@ -23,7 +23,7 @@ class Analysis
             try {
                 $stmt = $conn->prepare("INSERT INTO analysis (url, referrer, browser, agent,createddate) VALUES (?, ?, ?, ?,now())");
                 try {
-                    $stmt->bind_param("sss", $this->url, $this->referrer, $this->browser, $this->agent);
+                    $stmt->bind_param("ssss", $this->url, $this->referrer, $this->browser, $this->agent);
                     $stmt->execute();
                 } finally {
                     $stmt->close();
