@@ -16,9 +16,19 @@ class Analysis
         $this->referrer = $referrer;
         $this->browser = $browser;
     }
-    public function Insert()
+    private function validate()
     {
-        if(trim($this->url) != ""){
+        if (trim($this->url) === "") {
+            return false;
+        }
+        if (strpos(strtoupper($this->url), "GITHUBEDITOR") !== false) {
+            return false;
+        }
+        return true;
+    }
+    public function insert()
+    {
+        if($this->validate()){
             $conn = new mysqli("localhost", "root", "", "");
             try {
                 $stmt = $conn->prepare("INSERT INTO analysis (url, referrer, browser, agent,createddate) VALUES (?, ?, ?, ?,now())");
@@ -38,3 +48,4 @@ class Analysis
     }
 }
 $node = new Analysis($_POST["url"], $_POST["referrer"], $_POST["browser"], $_POST["agent"]);
+$node->insert();
